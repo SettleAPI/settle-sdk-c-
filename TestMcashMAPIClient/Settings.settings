@@ -1,0 +1,21 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="TestMcashMAPIClient" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="testbedToken" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="merchantId" Type="System.String" Scope="User">
+      <Value Profile="(Default)">cs</Value>
+    </Setting>
+    <Setting Name="merchantUserId" Type="System.String" Scope="User">
+      <Value Profile="(Default)">admin</Value>
+    </Setting>
+    <Setting Name="baseUri" Type="System.String" Scope="User">
+      <Value Profile="(Default)">https://mcashtestbed.appspot.com/merchant/v1</Value>
+    </Setting>
+    <Setting Name="merchantSecret" Type="System.String" Scope="User">
+      <Value Profile="(Default)">supersecret</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
