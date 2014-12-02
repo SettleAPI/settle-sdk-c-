@@ -86,4 +86,13 @@ namespace Mcash.Resources
         public string id { get; set; }
         public string argstring { get; set; }
     }
+
+    public class Ledger
+    {
+        public string id { get; set; }
+        public string currency { get; set; }
+        public string description { get; set; }
+        public string open_report_uri { get; set; }
+        public string last_closed_report_uri { get; set; }
+    }
 }

@@ -9,7 +9,12 @@ using System.Net;
 
 namespace Mcash
 {
-    public class McashResponseError : Exception
+    public class McashError: Exception {
+        public McashError(string message) : base(message) {}
+        public McashError(string message, Exception innerException) : base(message, innerException) {}
+    }
+
+    public class McashResponseError : McashError
     {
         public McashResponseError(HttpStatusCode statusCode, string description = "")
             : base(String.Format("{0:d} {0}: {1}", statusCode, description))
@@ -55,9 +60,14 @@ namespace Mcash
             _authenticator = new MapiAuthenticator(_merchantId, _userId, authKey, authMethod, testbedToken);
         }
 
-        public IRestResponse<T> Execute<T>(RestRequest request, Object body = null,  HttpStatusCode? status=null) where T : new()
+        public IRestResponse<T> Execute<T>(RestRequest request, Object body = null,  HttpStatusCode? status=null, bool absoluteUri = false) where T : new()
         {
-            var client = new RestClient(_baseUri);
+            RestClient client;
+            if (absoluteUri) {
+                client = new RestClient();
+            } else {
+                client = new RestClient(_baseUri);
+            }
             client.AddHandler("application/vnd.mcash.api.merchant.v1+json", new RestSharp.Deserializers.JsonDeserializer());
             client.Authenticator = _authenticator;
 
@@ -73,7 +83,7 @@ namespace Mcash
             if (response.ErrorException != null)
             {
                 const string message = "Error retrieving response.  Check inner details for more info.";
-                throw new ApplicationException(message, response.ErrorException);
+                throw new McashError(message, response.ErrorException);
             }
             if (status == null && (int) response.StatusCode / 100 != 2 || status != null && response.StatusCode != status)
             {
@@ -82,9 +92,9 @@ namespace Mcash
             return response;
         }
 
-        public void Execute(RestRequest request, Object body = null)
+        public void Execute(RestRequest request, Object body = null, HttpStatusCode? status=null, bool absoluteUri = false)
         {
-            Execute<object>(request, body);
+            Execute<object>(request, body, status, absoluteUri);
         }
 
         public Resources.Merchant GetMerchantInfo()
@@ -142,6 +152,11 @@ namespace Mcash
             DoPaymentRequestAction(tid, "abort", callbackUri);
         }
 
+        public void CapturePaymentRequest(string tid, string callbackUri = null)
+        {
+            DoPaymentRequestAction(tid, "capture", callbackUri);
+        }
+
         public string CreateShortlink(string callback_uri = null, string serial_number = null)
         {
             dynamic sl = new
@@ -163,10 +178,18 @@ namespace Mcash
             }
         }
 
-        public void CapturePaymentRequest(string tid, string callbackUri = null)
+        public Resources.Ledger GetLedger(string ledgerId = "default")
         {
-            DoPaymentRequestAction(tid, "capture", callbackUri);
+            var request = new RestRequest(String.Format("/ledger/{0}/", ledgerId));
+            var response = Execute<Resources.Ledger>(request);
+            return response.Data;
         }
 
+        public void CloseReport(string reportUri, string callbackUri=null) 
+        {
+            dynamic reqData = new {callback_uri = callbackUri};
+            var request = new RestRequest(reportUri, Method.PUT);
+            Execute(request, reqData, absoluteUri: true);
+        }
     }
 }

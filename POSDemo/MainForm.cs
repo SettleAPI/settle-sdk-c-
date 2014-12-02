@@ -114,5 +114,18 @@ namespace POSDemo
             var scan_token = _client.GetLastScan(_shortlinkId);
             customerTextBox.Text = scan_token != null ? scan_token : "";
         }
+
+        private void closeReportButton_Click(object sender, EventArgs e)
+        {
+            var reportUri = _client.GetLedger().open_report_uri;
+            _client.CloseReport(reportUri);  // TODO: Implement retry loop for this call in case of failures.
+            closedReportText.Text = String.Format("Closed {0}", reportUri);
+            
+        }
+
+        private void closedReportText_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

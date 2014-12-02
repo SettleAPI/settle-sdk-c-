@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.getScanButton = new System.Windows.Forms.Button();
             this.randomizePosTidButton = new System.Windows.Forms.Button();
             this.sendButton = new System.Windows.Forms.Button();
             this.currencyTextBox = new System.Windows.Forms.TextBox();
@@ -48,7 +49,8 @@
             this.captureButton = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.abortButton = new System.Windows.Forms.Button();
-            this.getScanButton = new System.Windows.Forms.Button();
+            this.closeReportButton = new System.Windows.Forms.Button();
+            this.closedReportText = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -73,6 +75,16 @@
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Create Payment Request";
+            // 
+            // getScanButton
+            // 
+            this.getScanButton.Location = new System.Drawing.Point(225, 17);
+            this.getScanButton.Name = "getScanButton";
+            this.getScanButton.Size = new System.Drawing.Size(59, 20);
+            this.getScanButton.TabIndex = 10;
+            this.getScanButton.Text = "Get scan";
+            this.getScanButton.UseVisualStyleBackColor = true;
+            this.getScanButton.Click += new System.EventHandler(this.getScanButton_Click);
             // 
             // randomizePosTidButton
             // 
@@ -253,21 +265,33 @@
             this.abortButton.UseVisualStyleBackColor = true;
             this.abortButton.Click += new System.EventHandler(this.abortButton_Click);
             // 
-            // getScanButton
+            // closeReportButton
             // 
-            this.getScanButton.Location = new System.Drawing.Point(225, 17);
-            this.getScanButton.Name = "getScanButton";
-            this.getScanButton.Size = new System.Drawing.Size(59, 20);
-            this.getScanButton.TabIndex = 10;
-            this.getScanButton.Text = "Get scan";
-            this.getScanButton.UseVisualStyleBackColor = true;
-            this.getScanButton.Click += new System.EventHandler(this.getScanButton_Click);
+            this.closeReportButton.Location = new System.Drawing.Point(356, 29);
+            this.closeReportButton.Name = "closeReportButton";
+            this.closeReportButton.Size = new System.Drawing.Size(75, 23);
+            this.closeReportButton.TabIndex = 7;
+            this.closeReportButton.Text = "Close report";
+            this.closeReportButton.UseVisualStyleBackColor = true;
+            this.closeReportButton.Click += new System.EventHandler(this.closeReportButton_Click);
+            // 
+            // closedReportText
+            // 
+            this.closedReportText.AutoSize = true;
+            this.closedReportText.Location = new System.Drawing.Point(353, 60);
+            this.closedReportText.Name = "closedReportText";
+            this.closedReportText.Size = new System.Drawing.Size(71, 13);
+            this.closedReportText.TabIndex = 8;
+            this.closedReportText.Text = "(report status)";
+            this.closedReportText.Click += new System.EventHandler(this.closedReportText_Click);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(570, 419);
+            this.Controls.Add(this.closedReportText);
+            this.Controls.Add(this.closeReportButton);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
@@ -280,6 +304,7 @@
             this.groupBox2.PerformLayout();
             this.groupBox3.ResumeLayout(false);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -306,6 +331,8 @@
         private System.Windows.Forms.Button abortButton;
         private System.Windows.Forms.Button randomizePosTidButton;
         private System.Windows.Forms.Button getScanButton;
+        private System.Windows.Forms.Button closeReportButton;
+        private System.Windows.Forms.Label closedReportText;
     }
 }
 
