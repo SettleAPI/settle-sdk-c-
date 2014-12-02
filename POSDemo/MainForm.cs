@@ -14,16 +14,18 @@ namespace POSDemo
     public partial class MainForm : Form
     {
         McashClient _client;
+        string _shortlinkId;
         string _tid
         {
             get { return tidLabel.Text; }
             set { tidLabel.Text = value; }
         }
 
-        public MainForm(McashClient client)
+        public MainForm(McashClient client, string shortlinkId)
         {
             InitializeComponent();
             _client = client;
+            _shortlinkId = shortlinkId;
         }
 
         private void sendButton_Click(object sender, EventArgs e)
@@ -105,6 +107,12 @@ namespace POSDemo
         {
             _client.CapturePaymentRequest(_tid);
             RefreshStatus(_tid);
+        }
+
+        private void getScanButton_Click(object sender, EventArgs e)
+        {
+            var scan_token = _client.GetLastScan(_shortlinkId);
+            customerTextBox.Text = scan_token != null ? scan_token : "";
         }
     }
 }

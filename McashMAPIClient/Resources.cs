@@ -9,7 +9,7 @@ namespace Mcash.Resources
 
     public class Merchant
     {
-        public string id {get; set; }
+        public string id { get; set; }
         public string jurisdiction { get; set; }
         public string organization_id { get; set; }
         public string business_name { get; set; }
@@ -18,7 +18,8 @@ namespace Mcash.Resources
         public Location location { get; set; }
     }
 
-    public class UpdatePaymentRequest {
+    public class UpdatePaymentRequest
+    {
         public string ledger { get; set; }
         public string callback_uri { get; set; }
         public string action { get; set; }
@@ -51,8 +52,8 @@ namespace Mcash.Resources
     {
         public string currency { get; set; }
         public string amount { get; set; }
-        public string additional_amount  { get; set; }
-        public string auth_amount  { get; set; }
+        public string additional_amount { get; set; }
+        public string auth_amount { get; set; }
         public string auth_additional_amount { get; set; }
         // TODO: List for captures
         public string status { get; set; }
@@ -79,8 +80,10 @@ namespace Mcash.Resources
         public float accuracy { get; set; }
     }
 
-    public class NoopResource
-    {
 
+    public class ShortlinkScan
+    {
+        public string id { get; set; }
+        public string argstring { get; set; }
     }
 }

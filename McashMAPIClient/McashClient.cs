@@ -5,10 +5,17 @@ using System.Text;
 using System.Threading.Tasks;
 using RestSharp;
 using System.Web;
+using System.Net;
 
 namespace Mcash
 {
-
+    public class McashResponseError : Exception
+    {
+        public McashResponseError(HttpStatusCode statusCode, string description = "")
+            : base(String.Format("{0:d} {0}: {1}", statusCode, description))
+        {
+        }
+    }
 
     public class MapiAuthenticator : IAuthenticator
     {
@@ -48,7 +55,7 @@ namespace Mcash
             _authenticator = new MapiAuthenticator(_merchantId, _userId, authKey, authMethod, testbedToken);
         }
 
-        public T Execute<T>(RestRequest request, Object body = null) where T : new()
+        public IRestResponse<T> Execute<T>(RestRequest request, Object body = null,  HttpStatusCode? status=null) where T : new()
         {
             var client = new RestClient(_baseUri);
             client.AddHandler("application/vnd.mcash.api.merchant.v1+json", new RestSharp.Deserializers.JsonDeserializer());
@@ -68,19 +75,23 @@ namespace Mcash
                 const string message = "Error retrieving response.  Check inner details for more info.";
                 throw new ApplicationException(message, response.ErrorException);
             }
-            return response.Data;
+            if (status == null && (int) response.StatusCode / 100 != 2 || status != null && response.StatusCode != status)
+            {
+                throw new McashResponseError(response.StatusCode);
+            }
+            return response;
         }
 
         public void Execute(RestRequest request, Object body = null)
         {
-            Execute<Resources.NoopResource>(request, body);
+            Execute<object>(request, body);
         }
 
         public Resources.Merchant GetMerchantInfo()
         {
             var request = new RestRequest(String.Format("merchant/{0}/", _merchantId), Method.GET);
             request.RootElement = "Merchant";
-            return Execute<Resources.Merchant>(request);
+            return Execute<Resources.Merchant>(request).Data;
         }
 
         public string CreatePaymentRequest(
@@ -100,19 +111,19 @@ namespace Mcash
                 callback_uri = callbackUri
             };
             var request = new RestRequest("/payment_request/", Method.POST);
-            return Execute<Resources.ResourceId>(request, pr).id;
+            return Execute<Resources.ResourceId>(request, pr).Data.id;
         }
 
         public Resources.PaymentRequestDetails GetPaymentRequestDetails(string tid)
         {
             var request = new RestRequest(String.Format("/payment_request/{0}/", tid));
-            return Execute<Resources.PaymentRequestDetails>(request);
+            return Execute<Resources.PaymentRequestDetails>(request).Data;
         }
 
         public Resources.PaymentRequestOutcome GetPaymentRequestOutcome(string tid)
         {
             var request = new RestRequest(String.Format("/payment_request/{0}/outcome/", tid));
-            return Execute<Resources.PaymentRequestOutcome>(request);
+            return Execute<Resources.PaymentRequestOutcome>(request).Data;
         }
 
         public void DoPaymentRequestAction(string tid, string action, string callbackUri = null)
@@ -125,10 +136,31 @@ namespace Mcash
             var request = new RestRequest(String.Format("/payment_request/{0}/", tid), Method.PUT);
             Execute(request, pr);
         }
-
+        
         public void AbortPaymentRequest(string tid, string callbackUri = null)
         {
             DoPaymentRequestAction(tid, "abort", callbackUri);
+        }
+
+        public string CreateShortlink(string callback_uri = null, string serial_number = null)
+        {
+            dynamic sl = new
+            {
+                callback_uri = callback_uri,
+                serial_number = serial_number
+            };
+            var request = new RestRequest("/shortlink/", Method.POST);
+            return Execute<Resources.ResourceId>(request, sl).Data.id;
+        }
+
+        public string GetLastScan(string shortlinkId, int ttl = 60) {
+            var request = new RestRequest(String.Format("/shortlink/{0}/last_scan/?ttl={1}", shortlinkId, ttl));
+            var response = Execute<Resources.ShortlinkScan>(request);
+            if (response.StatusCode == HttpStatusCode.NoContent) {
+                return null;
+            } else {
+                return response.Data.id;
+            }
         }
 
         public void CapturePaymentRequest(string tid, string callbackUri = null)

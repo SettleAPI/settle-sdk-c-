@@ -48,6 +48,7 @@
             this.captureButton = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.abortButton = new System.Windows.Forms.Button();
+            this.getScanButton = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -55,6 +56,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.getScanButton);
             this.groupBox1.Controls.Add(this.randomizePosTidButton);
             this.groupBox1.Controls.Add(this.sendButton);
             this.groupBox1.Controls.Add(this.currencyTextBox);
@@ -67,7 +69,7 @@
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(269, 151);
+            this.groupBox1.Size = new System.Drawing.Size(291, 151);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Create Payment Request";
@@ -76,7 +78,7 @@
             // 
             this.randomizePosTidButton.Location = new System.Drawing.Point(225, 39);
             this.randomizePosTidButton.Name = "randomizePosTidButton";
-            this.randomizePosTidButton.Size = new System.Drawing.Size(37, 23);
+            this.randomizePosTidButton.Size = new System.Drawing.Size(59, 23);
             this.randomizePosTidButton.TabIndex = 9;
             this.randomizePosTidButton.Text = "rand";
             this.randomizePosTidButton.UseVisualStyleBackColor = true;
@@ -251,6 +253,16 @@
             this.abortButton.UseVisualStyleBackColor = true;
             this.abortButton.Click += new System.EventHandler(this.abortButton_Click);
             // 
+            // getScanButton
+            // 
+            this.getScanButton.Location = new System.Drawing.Point(225, 17);
+            this.getScanButton.Name = "getScanButton";
+            this.getScanButton.Size = new System.Drawing.Size(59, 20);
+            this.getScanButton.TabIndex = 10;
+            this.getScanButton.Text = "Get scan";
+            this.getScanButton.UseVisualStyleBackColor = true;
+            this.getScanButton.Click += new System.EventHandler(this.getScanButton_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -293,6 +305,7 @@
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.Button abortButton;
         private System.Windows.Forms.Button randomizePosTidButton;
+        private System.Windows.Forms.Button getScanButton;
     }
 }
 

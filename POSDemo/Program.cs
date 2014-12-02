@@ -27,7 +27,8 @@ namespace POSDemo
                 "SECRET",
                 settings.testbedToken
             );
-            Application.Run(new MainForm(client));
+            var shortlinkId = client.CreateShortlink(serial_number:"9910000000010");
+            Application.Run(new MainForm(client, shortlinkId));
         }
     }
 }
